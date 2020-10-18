@@ -1,0 +1,11 @@
+de/barmeier/homematic/bridge/storage/DeviceStore.class
+de/barmeier/homematic/bridge/gateway/ControGateway.class
+de/barmeier/homematic/bridge/rpc/LogicLayer.class
+de/barmeier/homematic/bridge/processing/NewDevicesProcessor.class
+de/barmeier/homematic/bridge/rpc/DefaultHandlerMapping.class
+de/barmeier/homematic/bridge/HmcBridge.class
+de/barmeier/homematic/bridge/rest/HomematicApi.class
+de/barmeier/homematic/bridge/storage/DeviceEntity.class
+de/barmeier/homematic/bridge/rpc/Server.class
+de/barmeier/homematic/bridge/rest/HomematicRestServer.class
+de/barmeier/homematic/bridge/rpc/Client.class
