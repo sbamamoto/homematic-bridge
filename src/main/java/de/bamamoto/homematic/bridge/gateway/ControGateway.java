@@ -33,7 +33,7 @@ public class ControGateway {
 
         Map<String, String> arguments = new HashMap<>();
 
-        arguments.put("device.controller", "2");
+        arguments.put("device.controller", "1");
         arguments.put("device.device", deviceEntity.getAddress());
         arguments.put("device.description",deviceEntity.getType());
         arguments.put("device.channel",":1");

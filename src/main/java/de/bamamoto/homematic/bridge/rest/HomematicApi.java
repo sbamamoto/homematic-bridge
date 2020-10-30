@@ -25,19 +25,20 @@ public class HomematicApi {
     @Path("setvalue")
     @Produces(MediaType.TEXT_PLAIN)
     public String setValue ( @QueryParam("address") String address, @QueryParam("key") String key, @QueryParam("value") String value ) {
-
+        Object x;
         try {
             
             // TODO: Input parameter validation
             
             XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-            config.setServerURL(new URL("http://192.168.0.77:8080"));
+            config.setServerURL(new URL("http://homematic-raspi:2010"));
             config.setBasicUserName("contro");
             config.setBasicPassword("contro");
             XmlRpcClient client = new XmlRpcClient();
             client.setConfig(config);
-            Object[] params = new Object[]{/*address,key, 19.0*/};
-            client.execute("setValue", params);
+            double doubleValue = Double.parseDouble(value);
+            Object[] params = {address, key, doubleValue};
+             x = client.execute("setValue", params);
             return "OK";
         } catch (MalformedURLException | XmlRpcException ex) {
             Logger.getLogger(HomematicApi.class.getName()).log(Level.SEVERE, null, ex);

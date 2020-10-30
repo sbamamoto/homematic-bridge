@@ -27,7 +27,7 @@ public class HmcBridge {
             Thread.sleep(200);
             Client client = new Client();
             String id = UUID.randomUUID().toString();
-            client.init("http://192.168.0.77:9191", "e27801c6-11c0-4198-88ee-71c5e2d75700");
+            client.init("http://192.168.0.77:9090", "e27801c6-11c0-4198-88ee-71c5e2d75700");
             HomematicRestServer hap = new HomematicRestServer();
             hap.start();
             Thread.sleep (120000000);
