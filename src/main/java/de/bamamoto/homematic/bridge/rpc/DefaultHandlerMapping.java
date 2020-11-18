@@ -23,6 +23,9 @@ public class DefaultHandlerMapping extends PropertyHandlerMapping {
             }
 
             if (result == null) {
+                System.out.println(" ############################################# SYSTEM. ["
+                        + pHandlerName
+                        + "]");
                 result = super.getHandler("system." + pHandlerName);
             }
 
