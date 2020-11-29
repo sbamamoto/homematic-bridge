@@ -22,8 +22,21 @@ public class LogicLayer {
 
     Map<String, String> localState;
 
-    public Object[]  event(String interface_id, String address, String value_key, Boolean value) {
+    public Object[] event(String interface_id, String address, String value_key, Boolean value) {
         System.out.println(" EVENT RECEIVED " + address + " ValueID: " + value_key + "  Value: " + value);
+        ClientConfig config = new ClientConfig();
+        Client client = ClientBuilder.newClient(new ClientConfig().register(config));
+        WebTarget webTarget = client.target("http://localhost:8080").path("homematic");
+        Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
+        Response response = invocationBuilder.post(Entity.entity("{\"address\":\""
+                + address + "\",\"key\":\""
+                + value_key + "\",\"value\":\""
+                + value + "\"}", MediaType.APPLICATION_JSON));
+        return new Object[]{};
+    }
+
+    public Object[] event(String interface_id, String address, String value_key, Integer value) {
+        System.out.println(" Integer EVENT RECEIVED " + address + " ValueID: " + value_key + "  Value: " + value);
         return new Object[]{};
     }
 
@@ -39,26 +52,30 @@ public class LogicLayer {
         return new Object[]{};
     }
 
-    public void deleteDevices(String interface_id, String[] addresses) {
+    public Object[] deleteDevices(String interface_id, String[] addresses) {
         System.out.println("   #### delete devices called");
         for (String ad : addresses) {
             System.out.println("delete: " + ad);
         }
+        return new Object[]{};
     }
 
-    public void updateDevice(String interface_id, String address, int hint) {
+    public Object[] updateDevice(String interface_id, String address, int hint) {
         System.out.println("   #### update device called" + address);
+        return new Object[]{};
     }
 
-    public void replaceDevice(String interface_id, String oldDeviceAddress, String newDeviceAddress) {
+    public Object[] replaceDevice(String interface_id, String oldDeviceAddress, String newDeviceAddress) {
         System.out.println("   #### replace device called" + newDeviceAddress);
+        return new Object[]{};
     }
 
-    public void readdedDevice(String interfaceId, String[] addresses) {
+    public Object[] readdedDevice(String interfaceId, String[] addresses) {
         System.out.println("   #### new devices called");
         for (String ad : addresses) {
             System.out.println(" new: " + ad);
         }
+        return new Object[]{};
     }
 
     public Object[] multicall(Object[] objs) {
@@ -83,7 +100,7 @@ public class LogicLayer {
                     }
                     if (localState.containsKey(childParams[1] + "-" + childParams[2])
                             && localState.get(childParams[1] + "-" + childParams[2]).equals(childParams[3])) {
-                        System.out.println(" State has not changed: "+localState.get(childParams[1] + "-" + childParams[2]));
+                        System.out.println(" State has not changed: " + localState.get(childParams[1] + "-" + childParams[2]));
                     } else {
                         localState.put(childParams[1] + "-" + childParams[2], childParams[3].toString());
                         ClientConfig config = new ClientConfig();

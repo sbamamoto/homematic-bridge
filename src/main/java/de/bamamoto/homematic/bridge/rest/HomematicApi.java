@@ -37,7 +37,7 @@ public class HomematicApi {
             XmlRpcClient client = new XmlRpcClient();
             client.setConfig(config);
             double doubleValue = Double.parseDouble(value);
-            Object[] params = {address, key, doubleValue};
+            Object[] params = {address, key, doubleValue};   //needed to be the right data type !!!
              x = client.execute("setValue", params);
             return "OK";
         } catch (MalformedURLException | XmlRpcException ex) {
