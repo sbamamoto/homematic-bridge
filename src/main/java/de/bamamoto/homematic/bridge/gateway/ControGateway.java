@@ -18,13 +18,14 @@ import java.util.StringJoiner;
  * @author barmeier
  */
 public class ControGateway {
+    public static final Object semaphore = new Object();
+    
+    public void addDevice(DeviceEntity deviceEntity, String incomingInterface) throws MalformedURLException, IOException {
 
-    public void addDevice(DeviceEntity deviceEntity) throws MalformedURLException, IOException {
-        
         if (deviceEntity.getChildren().isEmpty()) {                           //ignoring children for now.
             return;
         }
-        
+
         URL url = new URL("http://localhost:8080/device/saveDevice");
         URLConnection con = url.openConnection();
         HttpURLConnection http = (HttpURLConnection) con;
@@ -35,10 +36,13 @@ public class ControGateway {
 
         arguments.put("device.controller", "1");
         arguments.put("device.device", deviceEntity.getAddress());
-        arguments.put("device.description",deviceEntity.getType());
-        arguments.put("device.channel",":1");
-        arguments.put("device.id","");
-        arguments.put("device.type","1");
+        arguments.put("device.description", deviceEntity.getType());
+        arguments.put("device.channel", ":1");
+        arguments.put("device.id", "");
+        arguments.put("device.type", "1");
+        arguments.put("device.sessionId", incomingInterface);
+
+        System.out.println(" ################## " + incomingInterface);
         
         StringJoiner sj = new StringJoiner("&");
         for (Map.Entry<String, String> entry : arguments.entrySet()) {
@@ -48,13 +52,15 @@ public class ControGateway {
         byte[] out = sj.toString().getBytes(StandardCharsets.UTF_8);
         int length = out.length;
 
-        http.setFixedLengthStreamingMode(length);
-        http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-        http.connect();
-        try (OutputStream os = http.getOutputStream()) {
-            os.write(out);
+        synchronized (semaphore) {
+            http.setFixedLengthStreamingMode(length);
+            http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+            http.connect();
+            try ( OutputStream os = http.getOutputStream()) {
+                os.write(out);
+            }
         }
-        
+
     }
 
 }

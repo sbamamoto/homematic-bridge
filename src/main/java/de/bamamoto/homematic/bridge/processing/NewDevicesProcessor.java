@@ -15,9 +15,11 @@ import java.util.logging.Logger;
 public class NewDevicesProcessor extends Thread {
 
     private final Object[] data;
+    private final String incomingInterface;
     
-    public NewDevicesProcessor (Object[] data) {
+    public NewDevicesProcessor (Object[] data, String incomingInterface) {
         this.data = data;
+        this.incomingInterface = incomingInterface;
     }
     
     @Override
@@ -26,14 +28,14 @@ public class NewDevicesProcessor extends Thread {
         
         DeviceStore ds = DeviceStore.getInstance();
         for (Object o : data) {
-            ds.addDevice((Map<String,Object>)o);            
+            ds.addDevice((Map<String,Object>)o, incomingInterface);            
         }
         
         // adding devices to contro
         ControGateway cgw = new ControGateway();
-        for (DeviceEntity de : ds.getDevices()) {
+        for (DeviceEntity de : ds.getDevices(incomingInterface)) {
             try {
-                cgw.addDevice(de);
+                cgw.addDevice(de, incomingInterface);
             } catch (IOException ex) {
                 Logger.getLogger(NewDevicesProcessor.class.getName()).log(Level.SEVERE, null, ex);
             }

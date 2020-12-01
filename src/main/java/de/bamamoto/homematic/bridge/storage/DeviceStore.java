@@ -23,21 +23,27 @@ import java.util.Map;
 public class DeviceStore {
 
     private static DeviceStore deviceStore;
-
-    private HashMap<String, DeviceEntity> storage;
-
+    private HashMap<String, Map<String,DeviceEntity>> interfaces;
+    
+    
     private DeviceStore() {
     }
     
     public static DeviceStore getInstance() {
         if (deviceStore == null) {
             deviceStore = new DeviceStore();
-            deviceStore.storage = new HashMap<>();
+            deviceStore.interfaces = new HashMap<>();
         }
         return deviceStore;
     }
 
-    public void addDevice(Map<String, Object> device) {
+    public void addDevice(Map<String, Object> device, String interfaceId) {
+        if (interfaces.get(interfaceId)==null) {
+            interfaces.put(interfaceId, new HashMap<>());
+        }
+        
+        Map<String, DeviceEntity> storage = interfaces.get(interfaceId);
+                
         String address = (String) device.get("ADDRESS");
         if (address.contains(":")) {                                             // this is a child address
             String parts[] = address.split((":"));
@@ -55,8 +61,9 @@ public class DeviceStore {
         }
     }
     
-    public List<DeviceEntity> getDevices() {
+    public List<DeviceEntity> getDevices(String interfaceId) {
         List<DeviceEntity> devices = new ArrayList<>();
+        Map<String, DeviceEntity> storage = interfaces.get(interfaceId);
         storage.forEach((address, deviceEntity) -> devices.add(deviceEntity));
         return devices;
     }

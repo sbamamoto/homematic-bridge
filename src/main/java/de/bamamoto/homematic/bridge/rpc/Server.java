@@ -1,6 +1,7 @@
 package de.bamamoto.homematic.bridge.rpc;
 
 import java.io.IOException;
+import java.net.URL;
 import javax.servlet.ServletException;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.server.PropertyHandlerMapping;
@@ -22,27 +23,13 @@ public class Server {
         port = 9090;
     }
 
-    public static Server getInstance() throws ServletException, IOException, XmlRpcException {
+    public static Server getInstance(String xmlUrl) throws ServletException, IOException, XmlRpcException {
         if (server == null) {
             server = new Server();
-//            XmlRpcServlet servlet = new XmlRpcServlet();
-//            // this object is used to configure the xml rpc server
-//            PropertyHandlerMapping phm = new PropertyHandlerMapping();
-//            phm.addHandler("default", server.getClass());
-//
-//            // some boilerplate stuff
-//            XmlRpcServerConfigImpl serverConfig = (XmlRpcServerConfigImpl) servlet.getConfig();
-//            serverConfig.setEnabledForExtensions(true);
-//            serverConfig.setContentLengthOptional(false);
-//
-//            server.webServer = new ServletWebServer(servlet, port);
-//
-//            // add the configuration to the xml rpc server
-//            server.webServer.getXmlRpcServer().setHandlerMapping(phm);
-//            server.webServer.start();
-
+            URL url = new URL(xmlUrl);
+            
             // start a web server at a certain port, usually above 1000
-            server.webServer = new WebServer(port);
+            server.webServer = new WebServer(url.getPort());
 
             // the xml rpc server lies on top of the web server
             XmlRpcServer xmlRpcServer = server.webServer.getXmlRpcServer();

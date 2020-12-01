@@ -1,5 +1,7 @@
 package de.bamamoto.homematic.bridge.rest;
 
+import de.bamamoto.homematic.bridge.rpc.Client;
+import de.bamamoto.homematic.bridge.rpc.SessionStore;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
@@ -24,21 +26,78 @@ public class HomematicApi {
     @GET
     @Path("setvalue")
     @Produces(MediaType.TEXT_PLAIN)
-    public String setValue ( @QueryParam("address") String address, @QueryParam("key") String key, @QueryParam("value") String value ) {
+    public String setValue ( @QueryParam("address") String address, @QueryParam("key") String key, @QueryParam("value") Double value,  @QueryParam("sessionId") String sessionId) {
+        Object x;
+        try {
+            
+            // TODO: Input parameter validation
+            
+//            XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+//            config.setServerURL(new URL("http://homematic-raspi.home:2010"));
+//            config.setBasicUserName("contro");
+//            config.setBasicPassword("contro");
+//            XmlRpcClient client = new XmlRpcClient();
+//            client.setConfig(config);
+            XmlRpcClient client = SessionStore.getInstance().getClient(sessionId);
+//            double doubleValue = Double.parseDouble(value);
+//            double doubleValue = value;
+            Object[] params = {address, key, value};   //needed to be the right data type !!!
+             x = client.execute("setValue", params);
+            return "OK";
+        } catch (XmlRpcException ex) {
+            Logger.getLogger(HomematicApi.class.getName()).log(Level.SEVERE, null, ex);
+            return "NOK";
+        }
+
+    }
+    
+        
+    @GET
+    @Path("setboolean")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String switchState ( @QueryParam("address") String address, @QueryParam("key") String key, @QueryParam("value") Boolean value,   @QueryParam("sessionId") String sessionId ) {
+        Object x;
+        try {
+            
+            // TODO: Input parameter validation
+//            
+//            XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+//            config.setServerURL(new URL("http://homematic-raspi.home:2001"));
+//            config.setBasicUserName("contro");
+//            config.setBasicPassword("contro");
+//            XmlRpcClient client = new XmlRpcClient();
+//            client.setConfig(config);
+//            boolean boolValue = Boolean.parseBoolean(value);
+            XmlRpcClient client = SessionStore.getInstance().getClient(sessionId);
+            Object[] params = {address, key, value};   //needed to be the right data type !!!
+             x = client.execute("setValue", params);
+            return "OK";
+        } catch (XmlRpcException ex) {
+            Logger.getLogger(HomematicApi.class.getName()).log(Level.SEVERE, null, ex);
+            return "NOK";
+        }
+
+    }
+    
+    
+    
+    @GET
+    @Path("getdevices")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getDevices () {
         Object x;
         try {
             
             // TODO: Input parameter validation
             
             XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-            config.setServerURL(new URL("http://homematic-raspi:2010"));
+            config.setServerURL(new URL("http://homematic-raspi.home:2010"));
             config.setBasicUserName("contro");
             config.setBasicPassword("contro");
             XmlRpcClient client = new XmlRpcClient();
             client.setConfig(config);
-            double doubleValue = Double.parseDouble(value);
-            Object[] params = {address, key, doubleValue};   //needed to be the right data type !!!
-             x = client.execute("setValue", params);
+            Object[] params = {};   //needed to be the right data type !!!
+             x = client.execute("listDevices", params);
             return "OK";
         } catch (MalformedURLException | XmlRpcException ex) {
             Logger.getLogger(HomematicApi.class.getName()).log(Level.SEVERE, null, ex);

@@ -45,9 +45,14 @@ public class LogicLayer {
         return new Object[]{};
     }
 
+    public Object[] listMethods(String interface_id) {
+        System.out.println("   #### listMethods called");
+        return new Object[]{};
+    }
+    
     public Object[] newDevices(String interface_id, Object[] dev_descriptions) {
-        System.out.println("   #### new devices called" + dev_descriptions);
-        NewDevicesProcessor ndp = new NewDevicesProcessor(dev_descriptions);
+        System.out.println("   #### new devices called" + dev_descriptions + " ---- " + interface_id);
+        NewDevicesProcessor ndp = new NewDevicesProcessor(dev_descriptions, interface_id);
         ndp.start();
         return new Object[]{};
     }
