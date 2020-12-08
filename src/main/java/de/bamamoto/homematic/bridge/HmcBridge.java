@@ -4,10 +4,10 @@ import de.bamamoto.homematic.bridge.rest.HomematicRestServer;
 import de.bamamoto.homematic.bridge.rpc.Client;
 import de.bamamoto.homematic.bridge.rpc.Server;
 import de.bamamoto.homematic.bridge.rpc.SessionStore;
+import de.bamamoto.homematic.bridge.storage.ConfigurationStorage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -28,6 +28,7 @@ public class HmcBridge {
 
     /**
      * @param args the command line arguments
+     * @throws org.apache.commons.configuration.ConfigurationException
      */
     public static void main(String[] args) throws ConfigurationException {
         try {
@@ -55,7 +56,7 @@ public class HmcBridge {
                     System.exit(0);
                 }                
             }           
-            configs.load(configFile);
+            configs = ConfigurationStorage.getInstance(configFile.getAbsolutePath()).getConfig();
             
             List<Object> ccus = configs.getList("CCUAddress");
             

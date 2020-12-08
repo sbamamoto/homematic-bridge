@@ -1,5 +1,6 @@
 package de.bamamoto.homematic.bridge.gateway;
 
+import de.bamamoto.homematic.bridge.storage.ConfigurationStorage;
 import de.bamamoto.homematic.bridge.storage.DeviceEntity;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -12,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
+import org.apache.commons.configuration.Configuration;
 
 /**
  *
@@ -22,11 +24,13 @@ public class ControGateway {
     
     public void addDevice(DeviceEntity deviceEntity, String incomingInterface) throws MalformedURLException, IOException {
 
-        if (deviceEntity.getChildren().isEmpty()) {                           //ignoring children for now.
+        if (deviceEntity.getChildren().isEmpty()) {                                //ignoring children for now.
             return;
         }
-
-        URL url = new URL("http://localhost:8080/device/saveDevice");
+        
+        Configuration configs = ConfigurationStorage.getInstance(null).getConfig();
+        
+        URL url = new URL(configs.getString("RESTForwardServerURL")+"/addDevice");
         URLConnection con = url.openConnection();
         HttpURLConnection http = (HttpURLConnection) con;
         http.setRequestMethod("POST");

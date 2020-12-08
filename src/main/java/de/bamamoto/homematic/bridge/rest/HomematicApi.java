@@ -31,16 +31,7 @@ public class HomematicApi {
         try {
             
             // TODO: Input parameter validation
-            
-//            XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-//            config.setServerURL(new URL("http://homematic-raspi.home:2010"));
-//            config.setBasicUserName("contro");
-//            config.setBasicPassword("contro");
-//            XmlRpcClient client = new XmlRpcClient();
-//            client.setConfig(config);
             XmlRpcClient client = SessionStore.getInstance().getClient(sessionId);
-//            double doubleValue = Double.parseDouble(value);
-//            double doubleValue = value;
             Object[] params = {address, key, value};   //needed to be the right data type !!!
              x = client.execute("setValue", params);
             return "OK";
@@ -60,14 +51,6 @@ public class HomematicApi {
         try {
             
             // TODO: Input parameter validation
-//            
-//            XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-//            config.setServerURL(new URL("http://homematic-raspi.home:2001"));
-//            config.setBasicUserName("contro");
-//            config.setBasicPassword("contro");
-//            XmlRpcClient client = new XmlRpcClient();
-//            client.setConfig(config);
-//            boolean boolValue = Boolean.parseBoolean(value);
             XmlRpcClient client = SessionStore.getInstance().getClient(sessionId);
             Object[] params = {address, key, value};   //needed to be the right data type !!!
              x = client.execute("setValue", params);
