@@ -1,0 +1,11 @@
+[Unit]
+Description=Homematic Bridge Service
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/lib/jvm/java-1.8.0-openjdk-armhf/bin/java -jar /opt/homematic-bridge/homematic-bridge-1.0-SNAPSHOT.jar -c /opt/homematic-bridge/bridge.properties 
+StandardOutput=file:/var/log/hmcbridge.log
+
+[Install]
+WantedBy=multi-user.target
