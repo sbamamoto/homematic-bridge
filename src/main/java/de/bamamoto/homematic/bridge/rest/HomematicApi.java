@@ -38,6 +38,9 @@ public class HomematicApi {
         } catch (XmlRpcException ex) {
             Logger.getLogger(HomematicApi.class.getName()).log(Level.SEVERE, null, ex);
             return "NOK";
+        } catch (Throwable ex) {
+            Logger.getLogger(HomematicApi.class.getName()).log(Level.SEVERE, null, ex);
+            return "NOK";
         }
 
     }

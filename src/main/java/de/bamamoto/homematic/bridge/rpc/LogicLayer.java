@@ -1,6 +1,7 @@
 package de.bamamoto.homematic.bridge.rpc;
 
 import de.bamamoto.homematic.bridge.processing.NewDevicesProcessor;
+import de.bamamoto.homematic.bridge.storage.ConfigurationStorage;
 import java.util.HashMap;
 import java.util.Map;
 import javax.ws.rs.client.ClientBuilder;
@@ -10,6 +11,7 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.glassfish.jersey.client.ClientConfig;
 
 /**
@@ -23,10 +25,11 @@ public class LogicLayer {
     Map<String, String> localState;
 
     public Object[] event(String interface_id, String address, String value_key, Boolean value) {
+        PropertiesConfiguration configuration = ConfigurationStorage.getInstance("").getConfig();
         System.out.println(" EVENT RECEIVED " + address + " ValueID: " + value_key + "  Value: " + value);
         ClientConfig config = new ClientConfig();
         Client client = ClientBuilder.newClient(new ClientConfig().register(config));
-        WebTarget webTarget = client.target("http://localhost:8080").path("homematic");
+        WebTarget webTarget = client.target(configuration.getString("RESTForwardServerURL","http://localhost:8080")).path("homematic");
         Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
         Response response = invocationBuilder.post(Entity.entity("{\"address\":\""
                 + address + "\",\"key\":\""
@@ -110,7 +113,8 @@ public class LogicLayer {
                         localState.put(childParams[1] + "-" + childParams[2], childParams[3].toString());
                         ClientConfig config = new ClientConfig();
                         Client client = ClientBuilder.newClient(new ClientConfig().register(config));
-                        WebTarget webTarget = client.target("http://localhost:8080").path("homematic");
+                        PropertiesConfiguration configuration = ConfigurationStorage.getInstance("").getConfig();
+                        WebTarget webTarget = client.target(configuration.getString("RESTForwardServerURL","http://localhost:8080")).path("homematic");
                         Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
                         Response response = invocationBuilder.post(Entity.entity("{\"address\":\""
                                 + childParams[1] + "\",\"key\":\""
