@@ -29,7 +29,7 @@ public class LogicLayer {
         System.out.println(" EVENT RECEIVED " + address + " ValueID: " + value_key + "  Value: " + value);
         ClientConfig config = new ClientConfig();
         Client client = ClientBuilder.newClient(new ClientConfig().register(config));
-        WebTarget webTarget = client.target(configuration.getString("RESTForwardServerURL","http://localhost:8080")).path("homematic");
+        WebTarget webTarget = client.target(configuration.getString("RESTForwardServerURL","http://localhost:8080"));
         Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
         Response response = invocationBuilder.post(Entity.entity("{\"address\":\""
                 + address + "\",\"key\":\""
@@ -114,12 +114,13 @@ public class LogicLayer {
                         ClientConfig config = new ClientConfig();
                         Client client = ClientBuilder.newClient(new ClientConfig().register(config));
                         PropertiesConfiguration configuration = ConfigurationStorage.getInstance("").getConfig();
-                        WebTarget webTarget = client.target(configuration.getString("RESTForwardServerURL","http://localhost:8080")).path("homematic");
+                        WebTarget webTarget = client.target(configuration.getString("RESTForwardServerURL","http://localhost:8080"));
                         Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
                         Response response = invocationBuilder.post(Entity.entity("{\"address\":\""
                                 + childParams[1] + "\",\"key\":\""
                                 + childParams[2] + "\",\"value\":\""
                                 + childParams[3] + "\"}", MediaType.APPLICATION_JSON));
+                        System.out.println("RESPONSE: " + response);
                     }
                 } catch (NullPointerException ex) {
                     ex.printStackTrace();
