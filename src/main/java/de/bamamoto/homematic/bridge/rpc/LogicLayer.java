@@ -42,7 +42,7 @@ public class LogicLayer {
         System.out.println(" Integer EVENT RECEIVED " + address + " ValueID: " + value_key + "  Value: " + value);
         return new Object[]{};
     }
-
+  
     public Object[] listDevices(String interface_id) {
         System.out.println("   #### listDevices called");
         return new Object[]{};
